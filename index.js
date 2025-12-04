@@ -27,21 +27,22 @@ app.post("/submit-form", async (req, res) => {
     const newForm = await Form.create({ name, email, phone, service });
 
     // 2. SendGrid Email to Admin
-    // const msg = {
-    //   to: process.env.ADMIN_EMAIL,
-    //   from: process.env.FROM_EMAIL, // must be verified in SendGrid
-    //   subject: "New Form Submission Received",
-    //   html: `
-    //     <h2>New Service Inquiry</h2>
-    //     <p><strong>Name:</strong> ${name}</p>
-    //     <p><strong>Email:</strong> ${email}</p>
-    //     <p><strong>Phone:</strong> ${phone}</p>
-    //     <p><strong>Service:</strong> ${service}</p>
-    //     <p>Time: ${new Date().toLocaleString()}</p>
-    //   `,
-    // };
+    const msg = {
+      to: process.env.ADMIN_EMAIL,
+      from: process.env.FROM_EMAIL, // must be verified in SendGrid
+      subject: "New Form Submission Received",
+      html: `
+        <h2>New Service Inquiry</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Service:</strong> ${service}</p>
+        <p>Time: ${new Date().toLocaleString()}</p>
+      `,
+    };
 
-    // await sgMail.send(msg);
+    await sgMail.send(msg);
+    console.log("Email sent to admin.");
 
     res.status(200).json({ message: "Form stored & email sent via SendGrid!" });
 
