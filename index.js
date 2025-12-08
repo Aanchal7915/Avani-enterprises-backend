@@ -665,6 +665,7 @@ app.post("/submit-form", async (req, res) => {
       businessCategory,
       notes,
     } = req.body;
+    console.log('services:',services, service )
 
     // Ensure services is an array
     let servicesArray = [];
@@ -675,10 +676,11 @@ app.post("/submit-form", async (req, res) => {
     } else if (service) {
       servicesArray = [service];
     }
+    console.log('service ara: ', servicesArray)
 
     const finalNotes = notes || businessCategory || "";
 
-    const primaryService = service || servicesArray[0] || "";
+    const primaryService =  servicesArray[0] || "";
 
     // 1. Save form data (includes services array and notes)
     const newForm = await Form.create({
