@@ -411,13 +411,7 @@ const generateOTP = () =>
 // Signup - Step 1: Validate Admin Code, Create User (Unverified), Send OTP
 app.post("/auth/signup", async (req, res) => {
   try {
-    const { name, email, password, adminCode } = req.body;
-
-    // 1. Validate Admin Code
-    const SECRET_CODE = process.env.ADMIN_SECRET_CODE || "12345678"; // Default fallback
-    if (adminCode !== SECRET_CODE) {
-      return res.status(403).json({ message: "Invalid Admin Code" });
-    }
+    const { name, email, password } = req.body;
 
     // 2. Check if user exists
     let user = await User.findOne({ email });
@@ -665,7 +659,7 @@ app.post("/submit-form", async (req, res) => {
       businessCategory,
       notes,
     } = req.body;
-    console.log('services:',services, service )
+    console.log('services:', services, service)
 
     // Ensure services is an array
     let servicesArray = [];
@@ -680,7 +674,7 @@ app.post("/submit-form", async (req, res) => {
 
     const finalNotes = notes || businessCategory || "";
 
-    const primaryService =  servicesArray[0] || "";
+    const primaryService = servicesArray[0] || "";
 
     // 1. Save form data (includes services array and notes)
     const newForm = await Form.create({
@@ -706,16 +700,14 @@ app.post("/submit-form", async (req, res) => {
             <p><strong>Name:</strong> ${name || "—"}</p>
             <p><strong>Email:</strong> ${email || "—"}</p>
             <p><strong>Phone:</strong> ${phone || "—"}</p>
-            <p><strong>Services:</strong> ${
-              servicesArray.length
-                ? servicesArray.map((s) => `<span>${s}</span>`).join(", ")
-                : "—"
-            }</p>
-            <p><strong>Notes:</strong> ${
-              finalNotes
-                ? `<div style="white-space:pre-wrap;">${finalNotes}</div>`
-                : "—"
-            }</p>
+            <p><strong>Services:</strong> ${servicesArray.length
+            ? servicesArray.map((s) => `<span>${s}</span>`).join(", ")
+            : "—"
+          }</p>
+            <p><strong>Notes:</strong> ${finalNotes
+            ? `<div style="white-space:pre-wrap;">${finalNotes}</div>`
+            : "—"
+          }</p>
             <p>Time: ${new Date().toLocaleString()}</p>
           `,
       };
