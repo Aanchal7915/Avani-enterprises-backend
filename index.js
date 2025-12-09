@@ -610,26 +610,35 @@ app.get("/leads", authMiddleware, async (req, res) => {
 app.patch("/leads/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, notes } = req.body;
 
-    // ✅ UPDATED: include "interested" in allowed statuses
-    const allowedStatuses = [
-      "not interested",
-      "contacted",
-      "not responded",
-      "interested",
-    ];
+    // Build update object
+    const updateData = {};
+    if (status) {
+      // ✅ UPDATED: include "interested" in allowed statuses
+      const allowedStatuses = [
+        "not interested",
+        "contacted",
+        "not responded",
+        "interested",
+      ];
 
-    if (!allowedStatuses.includes(status)) {
-      return res.status(404).json({
-        message:
-          'status should be one of ["not interested", "contacted", "not responded", "interested"]',
-      });
+      if (!allowedStatuses.includes(status)) {
+        return res.status(404).json({
+          message:
+            'status should be one of ["not interested", "contacted", "not responded", "interested"]',
+        });
+      }
+      updateData.status = status;
+    }
+
+    if (notes !== undefined) {
+      updateData.notes = notes;
     }
 
     const lead = await Form.findByIdAndUpdate(
       id,
-      { status },
+      updateData,
       { new: true }
     );
 
