@@ -621,12 +621,13 @@ app.patch("/leads/:id", authMiddleware, async (req, res) => {
         "contacted",
         "not responded",
         "interested",
+        "converted",
       ];
 
       if (!allowedStatuses.includes(status)) {
         return res.status(404).json({
           message:
-            'status should be one of ["not interested", "contacted", "not responded", "interested"]',
+            'status should be one of ["not interested", "contacted", "not responded", "interested", "converted"]',
         });
       }
       updateData.status = status;
