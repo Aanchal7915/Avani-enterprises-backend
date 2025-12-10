@@ -663,6 +663,7 @@ app.post("/submit-form", async (req, res) => {
     const {
       name,
       email,
+      cityState,
       phone,
       services,
       service,
@@ -690,6 +691,7 @@ app.post("/submit-form", async (req, res) => {
     const newForm = await Form.create({
       name,
       email,
+      cityState,
       phone,
       services: servicesArray,
       service: primaryService,
@@ -709,6 +711,7 @@ app.post("/submit-form", async (req, res) => {
             <h2>New Service Inquiry</h2>
             <p><strong>Name:</strong> ${name || "—"}</p>
             <p><strong>Email:</strong> ${email || "—"}</p>
+            <p><strong>City & State:</strong> ${cityState || "—"}</p>
             <p><strong>Phone:</strong> ${phone || "—"}</p>
             <p><strong>Services:</strong> ${servicesArray.length
             ? servicesArray.map((s) => `<span>${s}</span>`).join(", ")
