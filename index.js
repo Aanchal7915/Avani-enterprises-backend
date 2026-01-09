@@ -363,9 +363,18 @@ app.post("/submit-form", async (req, res) => {
             <p>Time: ${new Date().toLocaleString()}</p>
           `,
       };
-      await sgMail.send(msg);
-      console.log("Email sent to admin.");
+      sgMail.send(msg)
+        .then(() => {
+          console.log(`✅ Email sent successfully to: ${process.env.ADMIN_EMAIL}`);
+        })
+        .catch((error) => {
+          console.error("❌ SendGrid Error:", error.response ? error.response.body : error.message);
+        });
+
+      console.log("Keep moving: Email delivery started in background...");
     }
+
+
 
     res.status(200).json({
       message: "Form stored & email sent via SendGrid!",
@@ -382,7 +391,7 @@ app.post("/submit-form", async (req, res) => {
 
 const submitForm = async (req, res) => {
   try {
-    
+
     // 2. Destructure data for clarity
     const { fullName, email, phoneNu, service, companyName, projectDetails } = req.body;
 
@@ -431,7 +440,7 @@ const getAllForms = async (req, res) => {
     // .sort({ createdAt: -1 }) shows newest entries first
     // .limit() and .skip() handle the pagination
     const forms = await AvaniForm.find()
-      .sort({ createdAt: -1 }) 
+      .sort({ createdAt: -1 })
       .limit(limit)
       .skip(skipIndex)
       .lean(); // .lean() converts Mongoose docs to plain JS objects (faster performance)
